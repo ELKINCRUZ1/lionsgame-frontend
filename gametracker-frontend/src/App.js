@@ -5,6 +5,7 @@ import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import BibliotecaJuegos from './pages/BibliotecaJuegos'; 
 import EstadisticasPersonales from './pages/EstadisticasPersonales'; 
 import './App.css'; 
+// import Navbar from './components/navbar/Navbar';
 
 // ... Componente Navbar ...
 
@@ -12,7 +13,7 @@ function App() {
   return (
     <Router>
         <div className="App">
-            <Navbar />
+            {/* <Navbar /> */}
             <main className="content">
                 <Routes>
                     <Route path="/" element={<BibliotecaJuegos />} />

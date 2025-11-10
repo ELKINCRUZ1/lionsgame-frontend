@@ -1,43 +1,93 @@
+/* src/App.css - ESTILO PIXEL ART */
+
+/* 1. Definimos tu paleta de colores pixel */
+:root {
+  --naranja: #FF7300;
+  --verde: #38BC00;
+  --amarillo: #FFC300;
+  --azul: #00A1F1;
+  --fucsia: #FF0073;
+  --negro-pixel: #111111;
+  --blanco: #FFFFFF;
+  --gris-fondo: #222222;
+}
+
+/* 2. Estilos globales */
 body {
-  font-family: sans-serif;
-  background-color: #f9f9f9;
-  padding: 20px;
+  margin: 0;
+  /* ¡LA FUENTE PIXEL! */
+  font-family: 'Press Start 2P', cursive;
+
+  background-color: var(--gris-fondo); /* Fondo oscuro retro */
+  color: var(--blanco);
+
+  /* Esto evita que las fuentes se vean borrosas */
+  image-rendering: pixelated;
 }
 
-h1, h2, h3 {
-  color: #333;
+/* 3. Layout principal */
+.App {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 1.5rem;
 }
 
-form {
-  margin-bottom: 20px;
-  padding: 10px;
-  background-color: #fff;
-  border: 1px solid #ddd;
+/* 4. Estilos para lo que ves AHORA */
+
+/* Título "Mi Colección (0)" */
+h1 {
+  font-size: 1.5rem; /* La fuente pixel es grande, la achicamos un poco */
+  color: var(--amarillo); /* Amarillo de tu paleta */
+  text-shadow: 2px 2px var(--naranja); /* Sombra pixelada */
 }
 
-input, textarea {
-  margin: 5px;
-  padding: 8px;
-  border: 1px solid #ccc;
-}
-
+/* Botón "+ Agregar Nuevo Juego" */
 button {
-  padding: 8px 12px;
-  background-color: #000000;
-  color: white;
-  border: none;
+  font-family: 'Press Start 2P', cursive; /* Aseguramos la fuente */
+  background-color: var(--verde); /* Verde "START" */
+  color: var(--negro-pixel);
+
+  border: 4px solid var(--negro-pixel);
+  box-shadow: 4px 4px 0px var(--negro-pixel); /* Sombra 8-bit */
+
+  border-radius: 0; /* ¡NADA de bordes redondeados! */
+
+  padding: 12px 20px;
+  font-size: 0.8rem;
   cursor: pointer;
-}
-.juegos-container {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
+
+  /* Efecto al presionar */
+  transition: all 0.05s linear;
 }
 
-.juego-card {
-  background-color: #fff;
-  border: 1px solid #7e0000;
-  padding: 15px;
-  width: 250px;
-  box-shadow: 2px 2px 8px rgba(0,0,0,0.1);
+button:hover {
+  background-color: #32a800; /* Verde más brillante */
+}
+
+button:active {
+  box-shadow: none; /* Sin sombra al hacer clic */
+  transform: translate(4px, 4px); /* Simula que se presiona */
+}
+
+/* Texto "No tienes juegos..." */
+p {
+  font-size: 0.8rem;
+  color: var(--blanco);
+  line-height: 1.5;
+}
+/* Keyframes para la animación */
+@keyframes mover-estrellas {
+  from { background-position: 0 0; }
+  to   { background-position: 0 10000px; }
+}
+
+/* Usamos una imagen de estrellas pixeladas (pequeña y se repite) */
+body {
+  background-image: url('https://www.transparenttextures.com/patterns/stardust.png');
+
+  /* El color de fondo sigue siendo oscuro */
+  background-color: #111; 
+
+  /* ¡La magia de la animación! */
+  animation: mover-estrellas 200s linear infinite;
 }

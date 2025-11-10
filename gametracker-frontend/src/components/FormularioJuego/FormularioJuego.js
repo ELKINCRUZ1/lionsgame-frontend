@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { crearJuego, actualizarJuego } from '../services/apiService';
+import { crearJuego, actualizarJuego } from '../../services/apiService';
+import './FormularioJuego.css'; 
 
 // Valores iniciales basados en los campos de tu modelo Juego.js
 const valoresIniciales = {
@@ -60,74 +61,112 @@ const FormularioJuego = ({ juegoToEdit, onSave, onClose }) => {
         }
     };
 
+    //
+    // --- AQUÍ ESTÁ LA MAGIA DE LA FUSIÓN ---
+    // Este return usa la lógica de arriba pero con las clases CSS correctas.
+    //
     return (
-        <div className="formulario-modal">
-            <h3>{isEditing ? 'Editar Juego' : 'Agregar Nuevo Juego'}</h3>
+        // Usamos la clase principal 'formulario-juego'
+        <form className="formulario-juego" onSubmit={handleSubmit}>
             
-            <form onSubmit={handleSubmit}>
-                <label>Título:</label>
+            {/* Título dinámico */}
+            <h2>{isEditing ? 'Editar Juego' : 'Agregar Nuevo Juego'}</h2>
+            
+            {/* --- Título --- */}
+            <div className="form-grupo">
+                <label htmlFor="titulo">Título:</label>
                 <input 
                     type="text" 
+                    id="titulo"
                     name="titulo" 
                     value={formData.titulo} 
                     onChange={handleChange} 
                     required 
                 />
-
-                <label>Plataforma:</label>
+            </div>
+            
+            {/* --- Plataforma --- */}
+            <div className="form-grupo">
+                <label htmlFor="plataforma">Plataforma:</label>
                 <input 
                     type="text" 
+                    id="plataforma"
                     name="plataforma" 
                     value={formData.plataforma} 
                     onChange={handleChange} 
                     required 
                 />
-                
-                <label>Género:</label>
+            </div>
+            
+            {/* --- Género --- */}
+            <div className="form-grupo">
+                <label htmlFor="genero">Género:</label>
                 <input 
                     type="text" 
+                    id="genero"
                     name="genero" 
                     value={formData.genero} 
                     onChange={handleChange} 
                     required 
                 />
-
-                <label>URL de Portada (Imagen):</label>
+            </div>
+            
+            {/* --- URL de Portada --- */}
+            <div className="form-grupo">
+                <label htmlFor="imagenPortada">URL de Portada (Imagen):</label>
                 <input 
                     type="url" 
+                    id="imagenPortada"
                     name="imagenPortada" 
                     value={formData.imagenPortada} 
                     onChange={handleChange} 
                 />
-                
-                <label>Descripción:</label>
+            </div>
+            
+            {/* --- Descripción --- */}
+            <div className="form-grupo">
+                <label htmlFor="descripcion">Descripción:</label>
                 <textarea 
+                    id="descripcion"
                     name="descripcion" 
                     value={formData.descripcion} 
                     onChange={handleChange} 
                     rows="4"
                 />
-
-                <label>
+            </div>
+            
+            {/* --- Checkbox Completado --- */}
+            <div className="form-grupo form-grupo-checkbox">
+                <label htmlFor="completado">
                     <input 
                         type="checkbox" 
+                        id="completado"
                         name="completado" 
                         checked={formData.completado} 
                         onChange={handleChange} 
                     />
                     Juego Completado
                 </label>
+            </div>
 
-                {error && <div className="error-message">{error}</div>}
+            {/* --- Mensaje de Error --- */}
+            {error && <div className="error-message">{error}</div>}
 
+            {/* --- Botones --- */}
+            <div className="form-botones">
                 <button type="submit" disabled={loading}>
                     {loading ? 'Guardando...' : (isEditing ? 'Guardar Cambios' : 'Crear Juego')}
                 </button>
-                <button type="button" onClick={onClose} disabled={loading}>
+                <button 
+                    type="button" 
+                    className="btn-cancelar" 
+                    onClick={onClose} 
+                    disabled={loading}
+                >
                     Cancelar
                 </button>
-            </form>
-        </div>
+            </div>
+        </form>
     );
 };
 

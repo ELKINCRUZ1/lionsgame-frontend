@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import TarjetaJuego from '../components/TarjetaJuego'; 
-import FormularioJuego from '../components/FormularioJuego'; // Para crear/editar
+import TarjetaJuego from '../components/TarjetaJuego/TarjetaJuego'; 
+import FormularioJuego from '../components/FormularioJuego/FormularioJuego'; // Para crear/editar
 import ListaReseñas from '../components/ListaReseñas';     // Para ver reseñas
 import { getJuegos, eliminarJuego, actualizarJuego } from '../services/apiService'; 
+import './BibliotecaJuegos.css';
 
 const BibliotecaJuegos = () => {
     const [juegos, setJuegos] = useState([]); 

@@ -1,0 +1,54 @@
+/* src/components/FormularioJuego.css */
+
+/* El contenedor del formulario */
+.formulario-juego {
+  background-color: #333; 
+  border: 4px solid var(--amarillo); 
+  padding: 1.5rem;
+  margin-top: 2rem; 
+}
+
+.formulario-juego h2 {
+  font-size: 1rem;
+  color: var(--verde);
+  margin-top: 0;
+}
+
+/* Contenedor para cada par "label + input" */
+.form-grupo {
+  margin-bottom: 1rem;
+  display: flex; 
+  flex-direction: column; 
+}
+
+.form-grupo label {
+  font-size: 0.8rem;
+  color: var(--blanco);
+  margin-bottom: 0.5rem;
+}
+
+.form-grupo input[type="text"],
+.form-grupo input[type="url"],
+.form-grupo textarea {
+  font-family: 'Press Start 2P', cursive; 
+  
+  background-color: #FFFFFF;     
+  color: var(--negro-pixel);  
+
+  border: 2px solid var(--blanco);
+  padding: 0.5rem;
+  border-radius: 0; 
+  font-size: 0.75rem;
+
+}
+
+/* Estilo para los botones (si están dentro del form) */
+.form-botones {
+  display: flex;
+  gap: 1rem;
+}
+
+/* Botón de Cancelar (si lo tienes) */
+.form-botones .btn-cancelar {
+  background-color: var(--fucsia); 
+}

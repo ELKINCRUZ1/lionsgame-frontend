@@ -1,0 +1,45 @@
+/* src/components/TarjetaJuego.css */
+
+/* La "tarjeta" que contiene todo */
+.tarjeta-juego {
+  background-color: #333; 
+
+  /* Borde pixelado */
+  border: 4px solid var(--blanco);
+  box-shadow: 6px 6px 0px var(--azul); 
+
+  border-radius: 0; 
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* La imagen del juego */
+.tarjeta-juego-imagen {
+  width: 100%;
+  height: 180px; 
+  object-fit: cover;
+  border-bottom: 4px solid var(--blanco);
+  image-rendering: pixelated;
+}
+
+/* El contenedor para el texto */
+.tarjeta-juego-info {
+  padding: 1rem;
+}
+
+/* Título del juego */
+.tarjeta-juego-info h3 {
+  font-size: 1.1rem;
+  color: var(--verde);
+  margin: 0 0 0.75rem 0;
+  text-shadow: 2px 2px var(--negro-pixel);
+}
+
+/* Descripción o plataforma */
+.tarjeta-juego-info p {
+  font-size: 0.75rem;
+  color: var(--blanco);
+  margin: 0;
+  line-height: 1.5;
+}
