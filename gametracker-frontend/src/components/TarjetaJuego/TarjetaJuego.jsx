@@ -3,9 +3,14 @@ import { useNavigate } from 'react-router-dom';
 import { eliminarJuego, actualizarJuego } from '../../services/juegoServices.js';
 import './TarjetaJuego.css'; // El CSS pixel
 
-// Las props de colorIndex y onJuegoActualizado ya no se usan
-const TarjetaJuego = ({ juego, onRefresh }) => { 
+// Recibe los handlers de estado 'onJuegoEliminado' y 'onJuegoActualizado'
+const TarjetaJuego = ({ juego, onJuegoEliminado, onJuegoActualizado, colorIndex, esModoReseña }) => {
     const navigate = useNavigate();
+
+    // Lógica de color dinámico
+    const PIXEL_COLORS = ['--rojo', '--naranja', '--azul', '--fucsia', '--verde', '--amarillo']; 
+    const bgColorVar = PIXEL_COLORS[colorIndex % PIXEL_COLORS.length];
+
 
     const handleEditar = () => {
         navigate(`/formulario-juego/${juego._id}`);
@@ -19,9 +24,10 @@ const TarjetaJuego = ({ juego, onRefresh }) => {
         if (window.confirm(`¿Estás seguro de que quieres eliminar "${juego.titulo}"?`)) {
             try {
                 await eliminarJuego(juego._id);
-                onRefresh(); 
+                onJuegoEliminado(juego._id); // <-- LLAMA AL HANDLER FILTER (ACTUALIZACIÓN INSTANTÁNEA)
             } catch (error) {
                 console.error("Error al eliminar el juego", error);
+                alert("Error: No se pudo eliminar el juego. Revisa la consola (F12).");
             }
         }
     };
@@ -29,17 +35,20 @@ const TarjetaJuego = ({ juego, onRefresh }) => {
     const handleToggleCompletado = async () => {
         try {
             const datosUpdate = { completado: !juego.completado };
-            await actualizarJuego(juego._id, datosUpdate);
-            onRefresh(); 
+            const juegoActualizado = await actualizarJuego(juego._id, datosUpdate);
+            onJuegoActualizado(juegoActualizado); // <-- LLAMA AL HANDLER MAP (ACTUALIZACIÓN INSTANTÁNEA)
         } catch (error) {
             console.error("Error al actualizar estado 'completado'", error);
+            alert("Error: No se pudo actualizar el estado del juego. Revisa la consola (F12).");
         }
     };
 
 
     return (
-        // El fondo ahora es fijo y se define en el CSS
-        <div className="tarjeta-juego">
+        <div 
+            className="tarjeta-juego"
+            style={{ backgroundColor: `var(${bgColorVar})` }}
+        >
             
             <img 
                 src={juego.imagenPortada || 'https://i.imgur.com/gSjYwL0.png'} 
@@ -65,7 +74,12 @@ const TarjetaJuego = ({ juego, onRefresh }) => {
                 <button onClick={handleEliminar} className="btn-eliminar">🗑️ Eliminar</button>
             </div>
             
-            <button onClick={handleVerResenas} className="btn-resenas-grande">⭐ Reseñas</button>
+            <button 
+                onClick={handleVerResenas} 
+                className={`btn-resenas-grande ${esModoReseña ? 'resenas-glow' : ''}`}
+            >
+                ⭐ Reseñas
+            </button>
         </div>
     );
 };

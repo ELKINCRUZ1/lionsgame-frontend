@@ -37,9 +37,11 @@ const ListaResenas = () => {
 
     // Eliminar una reseña
     const handleEliminar = async (resenaId) => {
+        if (!window.confirm("¿Seguro que quieres eliminar esta reseña?")) return;
         try {
             // (Tu lógica de eliminar es perfecta, no se toca)
             await eliminarResena(resenaId);
+            // Actualiza el estado sin recargar la página
             setResenas(resenas.filter(r => r._id !== resenaId));
         } catch (err) {
             setError('Error al eliminar la reseña.');
@@ -56,7 +58,6 @@ const ListaResenas = () => {
             
             <div className="resenas-botones">
                 <Link to={`/agregar-resena/${juegoId}`}>
-                    {/* (Nota: Aún no hemos creado esta ruta en App.js, será el prox. paso) */}
                     <button>➕ Escribir Nueva Reseña</button>
                 </Link>
                 
@@ -72,16 +73,27 @@ const ListaResenas = () => {
                     // Ahora 'resenas.map' SÍ funcionará
                     resenas.map(resena => (
                         <div key={resena._id} className="resena-card">
-                            {/* Usamos .textoReseña y .puntuacion 
-                                (los nombres de tu base de datos) 
-                            */}
                             <h4>Puntuación: {resena.puntuacion} ⭐</h4>
                             <p className="resena-texto">"{resena.textoReseña}"</p>
                             <small>Horas Jugadas: {resena.horasJugadas || 0}</small>
                             <br />
-                            <button onClick={() => handleEliminar(resena._id)} className="btn-eliminar">
-                                🗑️ Eliminar
-                            </button>
+                            
+                            {/* =========== AÑADIMOS EL BOTÓN DE EDITAR AQUÍ ============ */}
+                            <div className="resena-acciones">
+                                <button 
+                                    onClick={() => navigate(`/editar-resena/${resena._id}`)} 
+                                    className="btn-editar-resena"
+                                >
+                                    ✏️ Editar
+                                </button>
+                                <button 
+                                    onClick={() => handleEliminar(resena._id)} 
+                                    className="btn-eliminar"
+                                >
+                                    🗑️ Eliminar
+                                </button>
+                            </div>
+                            {/* ========================================================== */}
                         </div>
                     ))
                 )}

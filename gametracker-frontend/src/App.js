@@ -42,7 +42,9 @@ function App() {
 
             {/* Redirección: Si entran a la raíz '/', llévalos a la biblioteca */}
             <Route path="/" element={<Navigate replace to="/videojuegos" />} />
-
+            
+            <Route path="/editar-resena/:id" element={<FormularioResena />} />
+            
           </Routes>
         </main>
       </div>

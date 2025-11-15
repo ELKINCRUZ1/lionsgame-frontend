@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom'; // <-- Necesario para el modo reseña
+import { useNavigate, useLocation } from 'react-router-dom';
 import { getTodosLosJuegos } from '../services/juegoServices.js'; 
 import TarjetaJuego from '../components/TarjetaJuego/TarjetaJuego';
 import './BibliotecaJuegos.css'; 
@@ -12,11 +12,10 @@ const BibliotecaJuegos = () => {
     const navigate = useNavigate();
     const location = useLocation(); 
 
-    // Chequeamos si el modo reseña está activo en la URL (al hacer clic en el Navbar)
     const esModoReseña = new URLSearchParams(location.search).get('modo') === 'reseñas';
 
 
-    // 1. CARGA DE DATOS
+    // 1. CARGA DE DATOS (Solo al inicio)
     useEffect(() => {
         const cargarJuegos = async () => {
             try {
@@ -30,7 +29,26 @@ const BibliotecaJuegos = () => {
             }
         };
         cargarJuegos();
-    }, [setLoading, setError, setJuegos]); 
+    }, []); // <-- Dependencia vacía para que solo cargue al inicio
+
+    // --- MANEJADORES DE ESTADO (Pasados al hijo) ---
+    
+    // 1. Eliminar: Filtra el estado y quita el juego.
+    const handleJuegoEliminado = (idJuegoEliminado) => {
+        setJuegos(juegosActuales => 
+            juegosActuales.filter(juego => juego._id !== idJuegoEliminado)
+        );
+    };
+
+    // 2. Actualizar: Reemplaza el objeto viejo por el nuevo.
+    const handleJuegoActualizado = (juegoActualizado) => {
+        setJuegos(juegosActuales => 
+            juegosActuales.map(juego => 
+                juego._id === juegoActualizado._id ? juegoActualizado : juego
+            )
+        );
+    };
+
 
     // --- LÓGICA DE FILTRADO ---
     const juegosFiltrados = juegos.filter(juego => {
@@ -44,27 +62,19 @@ const BibliotecaJuegos = () => {
         );
     });
 
-    // 2. FUNCIONES DE MANEJO DE ESTADO
-    const handleRefresh = () => {
-        window.location.reload(); 
-    };
-
     // --- RENDERIZADO ---
     if (loading) return <div><p>Cargando colección...</p></div>;
     if (error) return <div><p>{error}</p></div>;
 
-    // Título dinámico
     const tituloPrincipal = esModoReseña 
         ? '🔍 Selecciona el Juego a Reseñar' 
         : `🎮 Mi Colección (${juegos.length})`;
 
     return (
         <>
-            {/* --- CONTENEDOR DE ENCABEZADO (CON EL BUSCADOR) --- */}
             <div className="biblioteca-header">
                 <h1>{tituloPrincipal}</h1>
                 
-                {/* BARRA DE BÚSQUEDA */}
                 <input
                     type="text"
                     placeholder="Buscar por título, plataforma o género..."
@@ -80,10 +90,7 @@ const BibliotecaJuegos = () => {
                     + Agregar Nuevo Juego
                 </button>
             </div>
-            {/* ---------------------------------------------------- */}
 
-
-            {/* Cuadrícula de juegos (usamos la lista FILTRADA) */}
             <div className="biblioteca-grid">
                 {juegosFiltrados.length === 0 && filtroTexto ? (
                     <p className="mensaje-vacio">No se encontraron juegos que coincidan con la búsqueda.</p>
@@ -94,9 +101,11 @@ const BibliotecaJuegos = () => {
                         <TarjetaJuego 
                             key={juego._id} 
                             juego={juego}
-                            onRefresh={handleRefresh} 
+                            // ¡PASAMOS LOS HANDLERS DE MANIPULACIÓN DIRECTA!
+                            onJuegoEliminado={handleJuegoEliminado} 
+                            onJuegoActualizado={handleJuegoActualizado} 
                             colorIndex={index}
-                            esModoReseña={esModoReseña} // <-- PASAMOS LA PROP PARA EL BRILLO
+                            esModoReseña={esModoReseña}
                         />
                     ))
                 )}

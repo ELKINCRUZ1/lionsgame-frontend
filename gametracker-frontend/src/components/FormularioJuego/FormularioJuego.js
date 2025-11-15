@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom'; // Eliminamos 'useNavigate' ya que usamos window.location
+import { useParams } from 'react-router-dom'; // ¡Quitamos useNavigate, que causaba el warning!
 import { crearJuego, actualizarJuego, getJuegoById } from '../../services/juegoServices.js';
 import './FormularioJuego.css'; 
 
@@ -16,11 +16,13 @@ const initialFormState = {
 
 const FormularioJuego = () => {
     const { id } = useParams(); 
+    // La variable navigate ya no se declara.
     
     const [formData, setFormData] = useState(initialFormState);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
-    const [isEditMode, setIsEditMode] = useState(false);
+    // eslint-disable-next-line
+    const [isEditMode, setIsEditMode] = useState(false); // isEditMode es la variable correcta.
 
     // 1. Efecto para cargar datos en MODO EDICIÓN
     useEffect(() => {
@@ -61,14 +63,15 @@ const FormularioJuego = () => {
 
         const dataToSend = {
             ...formData,
-            añoLanzamiento: Number(formData.añoLanzamiento)
+            // Aseguramos que el campo sea un número
+            añoLanzamiento: Number(formData.añoLanzamiento) || null
         };
 
         try {
             if (isEditMode) {
                 await actualizarJuego(id, dataToSend);
             } else {
-                // Modo Creación: Ignoramos el error 'falso'
+                // Modo Creación: Ignoramos el error 'falso negativo'
                 try {
                     await crearJuego(dataToSend);
                 } catch (createErr) {
@@ -76,11 +79,11 @@ const FormularioJuego = () => {
                 }
             }
             
-            // ¡El botón Guardar te lleva a la biblioteca!
+            // FIX DE REDIRECCIÓN: Te lleva a la biblioteca y refresca la página
             window.location.href = '/videojuegos'; 
             
         } catch (err) {
-            // Este catch solo debe atrapar errores reales de validación o actualización
+            // Este catch solo atrapa errores reales de validación o actualización
             setError('Error al guardar el juego. Revisa los campos requeridos.');
             console.error("Error real al guardar:", err);
             setLoading(false); 
@@ -144,7 +147,7 @@ const FormularioJuego = () => {
                         {loading ? 'Guardando...' : (isEditMode ? 'Guardar Cambios' : 'Crear Juego')}
                     </button>
                     
-                    {/* ¡El botón Cancelar ahora te lleva a la página de Videojuegos! */}
+                    {/* El botón Cancelar te lleva de vuelta a la biblioteca */}
                     <button 
                         type="button" 
                         onClick={() => window.location.href = '/videojuegos'}
