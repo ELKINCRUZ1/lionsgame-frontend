@@ -8,8 +8,6 @@ import BibliotecaJuegos from './pages/BibliotecaJuegos';
 import ListaResenas from './pages/ListaResenas';
 import EstadisticasPersonales from './pages/EstadisticasPersonales';
 import FormularioJuego from './components/FormularioJuego/FormularioJuego'; 
-
-// ¡Asegúrate de que esta ruta sea correcta!
 import FormularioResena from './components/FormularioResena/FormularioResena';
 
 
@@ -17,6 +15,12 @@ function App() {
   return (
     <Router>
       <div className="App">
+        {/* --- ¡AÑADIMOS LAS ESTRELLAS AQUÍ! --- */}
+        <div className="shooting-star"></div> 
+        <div className="shooting-star"></div> 
+        <div className="shooting-star"></div> 
+        {/* --- FIN DE ESTRELLAS --- */}
+
         <Navbar />
 
         <main className="app-content">
@@ -34,7 +38,7 @@ function App() {
             {/* Ruta para ver Reseñas */}
             <Route path="/resenas/:juegoId" element={<ListaResenas />} />
 
-            {/* ¡¡ESTA ES LA RUTA NUEVA QUE FALTABA!! */}
+            {/* Ruta para AGREGAR Reseña */}
             <Route path="/agregar-resena/:juegoId" element={<FormularioResena />} />
 
             {/* Ruta para Estadísticas */}
@@ -43,6 +47,7 @@ function App() {
             {/* Redirección: Si entran a la raíz '/', llévalos a la biblioteca */}
             <Route path="/" element={<Navigate replace to="/videojuegos" />} />
             
+            {/* Ruta para EDITAR Reseña */}
             <Route path="/editar-resena/:id" element={<FormularioResena />} />
             
           </Routes>
