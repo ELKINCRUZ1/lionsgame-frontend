@@ -1,0 +1,93 @@
+import React, { useState, useEffect, useCallback } from 'react';
+import { useParams, useNavigate, Link } from 'react-router-dom';
+import { getResenasPorJuego, eliminarResena } from '../services/resenaService.js'; 
+// ¡Importamos el nuevo CSS pixel!
+import './ListaResenas.css'; 
+
+const ListaResenas = () => {
+    const [resenas, setResenas] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+    
+    const { juegoId } = useParams(); 
+    const navigate = useNavigate();
+
+    // Cargar las reseñas
+    const cargarResenas = useCallback(async () => {
+        if (!juegoId) return;
+        setLoading(true);
+        try {
+            // 'response' es el objeto completo: { success: true, data: [...] }
+            const response = await getResenasPorJuego(juegoId);
+            
+            // --- ¡AQUÍ ESTÁ LA CORRECCIÓN! ---
+            // Guardamos 'response.data', que SÍ es el array.
+            setResenas(response.data); 
+            
+            setLoading(false);
+        } catch (err) {
+            setError('Error al cargar las reseñas.');
+            setLoading(false);
+        }
+    }, [juegoId]);
+
+    useEffect(() => {
+        cargarResenas();
+    }, [cargarResenas]);
+
+    // Eliminar una reseña
+    const handleEliminar = async (resenaId) => {
+        try {
+            // (Tu lógica de eliminar es perfecta, no se toca)
+            await eliminarResena(resenaId);
+            setResenas(resenas.filter(r => r._id !== resenaId));
+        } catch (err) {
+            setError('Error al eliminar la reseña.');
+        }
+    };
+
+    if (loading) return <div><p>Cargando reseñas...</p></div>;
+    if (error) return <div><p>Error: {error}</p></div>;
+
+    return (
+        // Usamos las clases de CSS pixel
+        <div className="lista-resenas-container">
+            <h1>⭐ Reseñas del Juego ⭐</h1>
+            
+            <div className="resenas-botones">
+                <Link to={`/agregar-resena/${juegoId}`}>
+                    {/* (Nota: Aún no hemos creado esta ruta en App.js, será el prox. paso) */}
+                    <button>➕ Escribir Nueva Reseña</button>
+                </Link>
+                
+                <button onClick={() => navigate('/videojuegos')} className="btn-cancelar">
+                    Volver a la Biblioteca
+                </button>
+            </div>
+
+            <div className="resenas-grid">
+                {resenas.length === 0 ? (
+                    <p>No hay reseñas para este juego. ¡Sé el primero!</p>
+                ) : (
+                    // Ahora 'resenas.map' SÍ funcionará
+                    resenas.map(resena => (
+                        <div key={resena._id} className="resena-card">
+                            {/* Usamos .textoReseña y .puntuacion 
+                                (los nombres de tu base de datos) 
+                            */}
+                            <h4>Puntuación: {resena.puntuacion} ⭐</h4>
+                            <p className="resena-texto">"{resena.textoReseña}"</p>
+                            <small>Horas Jugadas: {resena.horasJugadas || 0}</small>
+                            <br />
+                            <button onClick={() => handleEliminar(resena._id)} className="btn-eliminar">
+                                🗑️ Eliminar
+                            </button>
+                        </div>
+                    ))
+                )}
+            </div>
+        </div>
+    );
+};
+
+export default ListaResenas;

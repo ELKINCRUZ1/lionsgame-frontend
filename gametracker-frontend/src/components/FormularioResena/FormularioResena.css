@@ -1,0 +1,77 @@
+/* ¡Este CSS es casi idéntico al de FormularioJuego.css! 
+  Así mantenemos el estilo pixelado.
+*/
+
+.formulario-resena-container {
+    width: 100%;
+    max-width: 800px; /* Hacemos el formulario un poco más ancho */
+    margin: 0 auto;
+}
+
+.formulario-resena {
+    background-color: #333; /* Fondo gris oscuro */
+    border: 4px solid var(--amarillo); /* Borde de tu paleta */
+    padding: 1.5rem;
+    margin-top: 2rem;
+    box-shadow: 6px 6px 0px var(--negro-pixel);
+}
+
+.formulario-resena h2 {
+    font-size: 1rem;
+    color: var(--verde);
+    margin-top: 0;
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+/* Contenedor para cada par "label + input" */
+.form-grupo {
+    margin-bottom: 1rem;
+    display: flex; /* Ordena los elementos */
+    flex-direction: column; /* Pone el label encima del input */
+}
+
+.form-grupo label {
+    font-size: 0.8rem;
+    color: var(--blanco);
+    margin-bottom: 0.5rem; /* Espacio entre label e input */
+}
+
+/* Estilo para los inputs de texto y área de texto */
+.form-grupo input[type="number"],
+.form-grupo textarea,
+.form-grupo select {
+    font-family: 'Press Start 2P', cursive; /* ¡Fuente pixel! */
+    background-color: #FFFFFF;     /* Fondo blanco */
+    color: var(--negro-pixel);   /* ¡Letras negras! */
+    border: 2px solid var(--blanco);
+    padding: 0.5rem;
+    border-radius: 0; 
+    font-size: 0.75rem;
+    -webkit-appearance: none; /* Quita estilos feos de iOS */
+}
+
+.form-grupo textarea {
+    font-family: 'Helvetica Neue', sans-serif; /* Fuente legible para texto largo */
+    font-size: 1rem;
+}
+
+/* Estilo para los botones */
+.form-botones {
+    display: flex;
+    gap: 1rem; /* Espacio entre botones */
+    margin-top: 2rem;
+}
+.form-botones button {
+    width: 100%; /* Ocupan todo el espacio */
+}
+
+/* Mensaje de error */
+.error-message {
+    color: var(--fucsia);
+    font-size: 0.8rem;
+    border: 2px solid var(--fucsia);
+    padding: 1rem;
+    margin-top: 1rem;
+    text-align: center;
+}

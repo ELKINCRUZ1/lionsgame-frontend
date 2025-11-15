@@ -1,48 +1,88 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import { eliminarJuego, actualizarJuego } from '../../services/juegoServices.js';
+import './TarjetaJuego.css'; // ¡El CSS pixel!
 
-const TarjetaJuego = ({ juego, onDelete, onMarkCompleted, onEdit, onViewReviews }) => {
-    // La URL de imagen de portada debe ser provista por tu BD
-    const imagenUrl = juego.imagenPortada || 'https://via.placeholder.com/150';
+const TarjetaJuego = ({ juego, onJuegoEliminado, onJuegoActualizado }) => {
+    const navigate = useNavigate();
+
+    // --- MANEJADORES DE ACCIONES ---
+
+    // Navega a la página del formulario para editar
+    const handleEditar = () => {
+        // Esta ruta debe coincidir con la que definas en App.js
+        navigate(`/formulario-juego/${juego._id}`);
+    };
+
+    // Navega a la página de reseñas
+    const handleVerResenas = () => {
+        navigate(`/resenas/${juego._id}`);
+    };
+
+    // Llama a la API para eliminar
+    const handleEliminar = async () => {
+        if (window.confirm(`¿Estás seguro de que quieres eliminar "${juego.titulo}"?`)) {
+            try {
+                await eliminarJuego(juego._id);
+                // Avisa al componente padre (BibliotecaJuegos) que este juego fue eliminado
+                onJuegoEliminado(juego._id);
+            } catch (error) {
+                console.error("Error al eliminar el juego", error);
+                alert("No se pudo eliminar el juego.");
+            }
+        }
+    };
+
+    // Llama a la API para marcar como completado/pendiente
+    const handleToggleCompletado = async () => {
+        try {
+            // Preparamos solo el dato que cambia
+            const datosUpdate = { completado: !juego.completado };
+            
+            // Llamamos al PUT
+            const juegoActualizado = await actualizarJuego(juego._id, datosUpdate);
+            
+            // Avisamos al padre (BibliotecaJuegos) del cambio
+            onJuegoActualizado(juegoActualizado);
+
+        } catch (error) {
+            console.error("Error al actualizar estado 'completado'", error);
+            alert("No se pudo actualizar el juego.");
+        }
+    };
+
 
     return (
-        <div className={`tarjeta-juego ${juego.completado ? 'completado' : ''}`}>
+        // Usamos la clase CSS que definimos antes
+        <div className="tarjeta-juego">
+            
+            {/* Imagen de Portada */}
             <img 
-                src={imagenUrl} 
+                src={juego.imagenPortada || 'https://i.imgur.com/gSjYwL0.png'} // Una imagen placeholder
                 alt={`Portada de ${juego.titulo}`} 
-                className="portada"
+                className="tarjeta-juego-imagen"
             />
             
-            <div className="info">
+            {/* Información del Juego */}
+            <div className="tarjeta-juego-info">
                 <h3>{juego.titulo}</h3>
-                <p><strong>{juego.plataforma}</strong> | {juego.genero}</p>
-                {/* Asumiendo que puntaje existe o se calcula con reseñas */}
-                <p>⭐ Puntuación: {juego.puntuacion || 'N/A'}</p> 
-                <p className="descripcion-corta">{juego.descripcion.substring(0, 100)}...</p>
+                <p>Plataforma: {juego.plataforma}</p>
+                <p>Género: {juego.genero}</p>
 
-                <div className="acciones">
-                    {/* Botón para Marcar/Desmarcar como completado (PUT) */}
-                    <button 
-                        onClick={() => onMarkCompleted(juego._id, !juego.completado)} 
-                        className={`btn-completado ${juego.completado ? 'btn-unmark' : 'btn-mark'}`}
-                    >
-                        {juego.completado ? '✅ Completado' : 'Marcar como completado'}
-                    </button>
+                {/* Botón de Completado (cambia de color) */}
+                <button 
+                    onClick={handleToggleCompletado}
+                    className={juego.completado ? 'btn-completado' : 'btn-pendiente'}
+                >
+                    {juego.completado ? '✅ COMPLETADO' : '⬜ PENDIENTE'}
+                </button>
+            </div>
 
-                    {/* Botón para Abrir Reseñas (NUEVO ENLACE) */}
-                    <button className="btn-reseña" onClick={() => onViewReviews(juego)}>
-                        Ver Reseñas
-                    </button>
-                    
-                    {/* Botón para Editar (NUEVO ENLACE) */}
-                    <button className="btn-editar" onClick={() => onEdit(juego)}>
-                        ✏️ Editar
-                    </button>
-                    
-                    {/* Botón para Eliminar (DELETE) */}
-                    <button className="btn-eliminar" onClick={() => onDelete(juego._id)}>
-                        🗑️ Eliminar
-                    </button>
-                </div>
+            {/* Botones de Acción */}
+            <div className="tarjeta-juego-acciones">
+                <button onClick={handleEditar} className="btn-editar">✏️ Editar</button>
+                <button onClick={handleEliminar} className="btn-eliminar">🗑️ Eliminar</button>
+                <button onClick={handleVerResenas} className="btn-resenas">⭐ Reseñas</button>
             </div>
         </div>
     );

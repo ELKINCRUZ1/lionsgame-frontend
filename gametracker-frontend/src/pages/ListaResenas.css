@@ -1,0 +1,69 @@
+/* Estilos para la página de Lista de Reseñas */
+
+.lista-resenas-container {
+    width: 100%;
+}
+
+.lista-resenas-container h1 {
+    color: var(--amarillo);
+    text-shadow: 2px 2px var(--negro-pixel);
+    font-size: 1.5rem;
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.resenas-botones {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+/* Usamos el mismo estilo de botón que ya tenemos */
+.resenas-botones button {
+    font-family: 'Press Start 2P', cursive;
+}
+
+/* El grid que muestra las tarjetas de reseña */
+.resenas-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+/* Cada tarjeta de reseña individual */
+.resena-card {
+    background-color: #333;
+    border: 4px solid var(--azul); /* Borde azul de tu paleta */
+    padding: 1rem;
+    box-shadow: 6px 6px 0px var(--negro-pixel);
+}
+
+.resena-card h4 {
+    font-size: 1rem;
+    color: var(--verde);
+    margin: 0 0 1rem 0;
+}
+
+.resena-card .resena-texto {
+    font-family: 'Helvetica Neue', sans-serif; /* Usamos una fuente más legible para el texto largo */
+    font-size: 1rem;
+    color: var(--blanco);
+    line-height: 1.6;
+    margin: 1rem 0;
+    font-style: italic;
+    border-left: 4px solid var(--azul);
+    padding-left: 1rem;
+}
+
+.resena-card small {
+    font-size: 0.75rem;
+    color: #ccc;
+}
+
+.resena-card .btn-eliminar {
+    background-color: var(--fucsia);
+    font-size: 0.7rem;
+    padding: 0.5rem 0.75rem;
+    margin-top: 1rem;
+}

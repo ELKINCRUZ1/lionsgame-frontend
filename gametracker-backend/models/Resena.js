@@ -6,7 +6,6 @@ const ResenaSchema = new mongoose.Schema({
         ref: 'Juego', 
         required: [true, 'La reseña debe estar asociada a un juego.']
     },
- 
     textoReseña: { 
         type: String,
         required: [true, 'El texto de la reseña es obligatorio.'],
@@ -19,7 +18,6 @@ const ResenaSchema = new mongoose.Schema({
         min: 1, 
         max: 5 
     },
-   
     horasJugadas: { 
         type: Number,
         default: 0
@@ -39,9 +37,8 @@ const ResenaSchema = new mongoose.Schema({
     fechaActualizacion: {
         type: Date,
         default: Date.now
-    }});
+    }
+});
 
-
-const Resena = mongoose.model('Resena', ResenaSchema); 
-
-module.exports = Resena;
+// Esta es la única línea de exportación que necesitas.
+module.exports = mongoose.models.Resena || mongoose.model('Resena', ResenaSchema);

@@ -1,17 +1,15 @@
-/* src/components/TarjetaJuego.css */
+/* src/components/TarjetaJuego/TarjetaJuego.css */
 
 /* La "tarjeta" que contiene todo */
 .tarjeta-juego {
   background-color: #333; 
-
-  /* Borde pixelado */
   border: 4px solid var(--blanco);
   box-shadow: 6px 6px 0px var(--azul); 
-
-  border-radius: 0; 
+  border-radius: 0;
   overflow: hidden;
   display: flex;
   flex-direction: column;
+  width: 250px; /* Aseguramos un ancho para que quepan */
 }
 
 /* La imagen del juego */
@@ -28,7 +26,6 @@
   padding: 1rem;
 }
 
-/* Título del juego */
 .tarjeta-juego-info h3 {
   font-size: 1.1rem;
   color: var(--verde);
@@ -36,10 +33,51 @@
   text-shadow: 2px 2px var(--negro-pixel);
 }
 
-/* Descripción o plataforma */
 .tarjeta-juego-info p {
   font-size: 0.75rem;
   color: var(--blanco);
   margin: 0;
   line-height: 1.5;
+}
+
+/* Contenedor de los botones PEQUEÑOS (Editar, Eliminar, Reseñas) */
+.tarjeta-juego-acciones {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 1rem 1rem 1rem; 
+  gap: 0.15rem; /* ¡MÁS REDUCIDO AÚN! */
+}
+
+/* Estilo para los 3 botones PEQUEÑOS de acción */
+.tarjeta-juego-acciones button {
+  flex: 1; 
+  font-size: 0.7rem; /* Aumentamos ligeramente la fuente para que se lea */
+  padding: 0.5rem 0.1rem; /* Padding reducido al mínimo */
+  white-space: nowrap;
+}
+
+.btn-editar {
+  background-color: var(--azul);
+}
+.btn-eliminar {
+  background-color: var(--fucsia);
+}
+.btn-resenas {
+  background-color: var(--amarillo); /* El botón de Reseñas ahora es amarillo */
+}
+
+
+/* Botón de estado (Completado / Pendiente) */
+.btn-completado, .btn-pendiente {
+  width: 100%;
+  margin-top: 1rem;
+  font-size: 0.7rem;
+}
+.btn-completado {
+  background-color: var(--verde);
+  color: var(--negro-pixel);
+}
+.btn-pendiente {
+  background-color: #555;
+  color: #aaa;
 }

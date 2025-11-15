@@ -1,90 +1,94 @@
-import React, { useState, useEffect } from 'react';
-import { getJuegos, getResenasPorJuego } from '../services/apiService';
+import React from 'react'; // <-- Solo necesitamos importar React ahora
+import './EstadisticasPersonales.css'; 
 
-// Función utilitaria para calcular el promedio de puntuaciones
-const calcularEstadisticas = (juegos, resenas) => {
-    // 1. Juegos Completados
-    const completados = juegos.filter(j => j.completado).length;
-    const totalJuegos = juegos.length;
-    
-    // 2. Puntuación Promedio
-    let totalPuntuacion = 0;
-    let numResenas = 0;
+// Datos inventados para simular la base de datos
+const datosEstadisticos = {
+    totalJuegos: 18,
+    juegosCompletados: 12,
+    porcentajeCompletado: 66.7, // (12/18)
+    totalHoras: 450,
+    plataformaPrincipal: 'PC',
 
-    //Datos de juegos:
-    
-    // Placeholder para la dificultad
-    const dificultadPromedio = 'Normal'; 
+    // Desglose por GÉNERO (porcentajes de tu biblioteca)
+    generosFavoritos: [
+        { nombre: 'RPG', porcentaje: 35 },
+        { nombre: 'Acción', porcentaje: 25 },
+        { nombre: 'Estrategia', porcentaje: 15 },
+        { nombre: 'Plataformas', porcentaje: 10 },
+        { nombre: 'Otros', porcentaje: 15 },
+    ],
 
-    return {
-        totalJuegos,
-        completados,
-        pendientes: totalJuegos - completados,
-        porcentajeCompletado: totalJuegos > 0 ? ((completados / totalJuegos) * 100).toFixed(1) : 0,
-        puntuacionPromedio: totalPuntuacion > 0 ? (totalPuntuacion / numResenas).toFixed(2) : 'N/A',
-        dificultadPromedio,
-    };
+    // Puntuación promedio (simulada de las reseñas)
+    puntuacionPromedio: 4.2,
+    dificultadPreferida: 'Normal',
 };
 
 
+// Componente para la barra de progreso pixelada
+const ProgresoPixel = ({ porcentaje, color }) => (
+    <div className="progreso-bar-container">
+        <div 
+            className="progreso-bar" 
+            style={{ width: `${porcentaje}%`, backgroundColor: color }}
+        />
+    </div>
+);
+
+
 const EstadisticasPersonales = () => {
-    const [juegos, setJuegos] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
-    const [stats, setStats] = useState({}); // Estado para guardar las estadísticas calculadas
+    // Usamos los datos estáticos directamente, sin necesidad de useState.
+    const stats = datosEstadisticos; 
 
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                // Solo cargamos los juegos por ahora
-                const juegosData = await getJuegos(); 
-                setJuegos(juegosData);
-                
-                // Estadísticas simples
-                const calculatedStats = calcularEstadisticas(juegosData, []); 
-                setStats(calculatedStats);
-                
-                setLoading(false);
-            } catch (err) {
-                setError('Error al cargar datos para estadísticas.');
-                setLoading(false);
-            }
-        };
-
-        fetchData();
-    }, []);
-
-    if (loading) return <div>Cargando estadísticas...</div>;
-    if (error) return <div>Error: {error}</div>;
-
+    // Ya que no hay 'loading', renderizamos directamente.
     return (
-        <div className="estadisticas-dashboard">
-            <h2>📊 Dashboard de Estadísticas Personales</h2>
-            
-            <div className="stats-resumen">
-                <div className="stat-card">
-                    <h3>Total de Juegos</h3>
-                    <p>{stats.totalJuegos}</p>
+        <div className="stats-container">
+            <h1>📊 Dashboard de LionsGame</h1>
+            <p className="stats-subtitle">Análisis de tu actividad de juego.</p>
+
+            <div className="stats-grid">
+                
+                {/* 1. JUEGOS COMPLETADOS */}
+                <div className="stat-panel panel-rojo">
+                    <h2 className="panel-title">🏆 Tasa de Finalización</h2>
+                    <p className="panel-value">{stats.porcentajeCompletado}%</p>
+                    <ProgresoPixel 
+                        porcentaje={stats.porcentajeCompletado} 
+                        color="var(--fucsia)" 
+                    />
+                    <small>({stats.juegosCompletados} de {stats.totalJuegos} completados)</small>
                 </div>
-                <div className="stat-card">
-                    <h3>Juegos Completados</h3>
-                    <p>{stats.completados} ({stats.porcentajeCompletado}%)</p>
+
+                {/* 2. TOTAL DE HORAS */}
+                <div className="stat-panel panel-azul">
+                    <h2 className="panel-title">⏱️ Horas Registradas</h2>
+                    <p className="panel-value">{stats.totalHoras}</p>
+                    <small>Horas de juego estimadas</small>
                 </div>
-                <div className="stat-card">
-                    <h3>Juegos Pendientes</h3>
-                    <p>{stats.pendientes}</p>
+
+                {/* 3. PUNTUACIÓN PROMEDIO */}
+                <div className="stat-panel panel-amarillo">
+                    <h2 className="panel-title">⭐ Puntuación Promedio</h2>
+                    <p className="panel-value">{stats.puntuacionPromedio} / 5</p>
+                    <small>Dificultad preferida: {stats.dificultadPreferida}</small>
                 </div>
-                <div className="stat-card">
-                    <h3>Puntuación Promedio</h3>
-                    <p>{stats.puntuacionPromedio} ⭐</p>
+
+                {/* 4. DESGLOSE POR GÉNERO (Gráfico de barras retro) */}
+                <div className="stat-panel panel-verde panel-genero">
+                    <h2 className="panel-title">🎮 Géneros Favoritos</h2>
+                    <div className="genero-list">
+                        {stats.generosFavoritos.map((genero, index) => (
+                            <div key={index} className="genero-item">
+                                <span className="genero-nombre">{genero.nombre}</span>
+                                <span className="genero-porcentaje">{genero.porcentaje}%</span>
+                                <ProgresoPixel 
+                                    porcentaje={genero.porcentaje} 
+                                    color="var(--naranja)" 
+                                />
+                            </div>
+                        ))}
+                    </div>
                 </div>
             </div>
-            
-            {/* Puedes añadir gráficos aquí si usas alguna librería como Chart.js */}
-            
-            <p className="nota-estadisticas">
-                * Las estadísticas se basan en la data actual de tu biblioteca y reseñas.
-            </p>
         </div>
     );
 };

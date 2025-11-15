@@ -8,6 +8,11 @@ const cors = require('cors');
 const resenasRoutes = require('./routes/resenas');
 const juegosRoutes = require('./routes/juegos'); 
 
+// --- ¡LA LÍNEA CORREGIDA ESTÁ AQUÍ! ---
+// Usa tu nuevo cluster, tu usuario, tu contraseña, y el nombre de la DB (ELKINCRUZ1)
+const MONGO_URI_DEFAULT = "mongodb+srv://kinscruz833_db_user:kinscruz833@cluster0.ooosbzy.mongodb.net/ELKINCRUZ1?appName=Cluster0"; 
+// --- ---
+
 const app = express();
 
 // 2. Middleware
@@ -19,12 +24,10 @@ app.use('/api/juegos', juegosRoutes);
 app.use('/api/resenas', resenasRoutes);
 
 // 4. Conexión a MongoDB
-const MONGO_URI_DEFAULT = "mongodb+srv://jacobogarcesoquendo:aFJzVMGN3o7fA38A@cluster0.mqwbn.mongodb.net/PAULA_HERRERA"; 
-
 const connectDB = async () => {
     try {
-        //awatt mongoose.connect(process.env.HONGO URI || MONGO URI DEFART); 
-        await mongoose.connect("mongodb+srv://jacobogarcesoquendo:aFJzVMGN3o7fA38A@cluster0.mqwbn.mongodb.net/PAULA HERRERA");
+        // Usamos la variable de entorno (si existe) o la que definimos arriba
+        await mongoose.connect(process.env.MONGO_URI || MONGO_URI_DEFAULT);
         console.log('✅ MongoDB Atlas conectado exitosamente.');
     } catch (error) {
         console.error('❌ Error de conexión a MongoDB:', error.message);
